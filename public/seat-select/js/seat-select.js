@@ -23,14 +23,18 @@ const renderSeats = () => {
 
       // TODO: render the seat availability based on the data...
 
-      // fetch(`/flights/${}`, {
-      //   method: 'GET'
-      // })
-      // .then(async (res) => {
-      //   const response = await res.json();
-      // }).then((res) => {
-      //   res.status(200).send('ok')
-      // })
+      const flight = document.querySelector("#flight");
+
+      fetch(`/flights/${flight.value}`, {
+        method: "GET",
+      })
+        .then(async (res) => {
+          const response = await res.json();
+        })
+        .then((res) => {
+          console.log("data from fetch!!!", res);
+          res.status(200).send("ok");
+        });
 
       seat.innerHTML = seatAvailable;
       row.appendChild(seat);
@@ -38,6 +42,7 @@ const renderSeats = () => {
   }
 
   let seatMap = document.forms["seats"].elements["seat"];
+
   seatMap.forEach((seat) => {
     seat.onclick = () => {
       selection = seat.value;

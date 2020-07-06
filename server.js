@@ -13,6 +13,7 @@ const handleFlight = (req, res) => {
   const allFlights = Object.keys(flights);
   // is flightNumber in the array?
   if (allFlights.includes(flightNumber)) {
+    //
   }
   console.log("REAL FLIGHT: ", allFlights.includes(flightNumber));
 };
