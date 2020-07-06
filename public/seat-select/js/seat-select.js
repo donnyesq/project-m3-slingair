@@ -4,7 +4,8 @@ const confirmButton = document.getElementById("confirm-button");
 
 let selection = "";
 
-const renderSeats = () => {
+const renderSeats = (arrOfSeats) => {
+  console.log("ARRAY OF SEATS:", arrOfSeats);
   document.querySelector(".form-container").style.display = "block";
 
   const alpha = ["A", "B", "C", "D", "E", "F"];
@@ -25,18 +26,15 @@ const renderSeats = () => {
 
       const flight = document.querySelector("#flight");
 
-      fetch(`/flights/${flight.value}`, {
-        method: "GET",
-      })
-        .then(async (res) => {
-          const response = await res.json();
-        })
-        .then((res) => {
-          console.log("data from fetch!!!", res);
-          res.status(200).send("ok");
-        });
+      const seatFound = arrOfSeats.find((seat) => {
+        return seat.id === seatNumber;
+      });
 
-      seat.innerHTML = seatAvailable;
+      if (!seatFound.isAvailable) {
+        seat.innerHTML = seatOccupied;
+      } else {
+        seat.innerHTML = seatAvailable;
+      }
       row.appendChild(seat);
     }
   }
@@ -58,20 +56,22 @@ const renderSeats = () => {
   });
 };
 
-const toggleFormContent = (event) => {
+const toggleFormContent = async (event) => {
   const flightNumber = flightInput.value;
-  console.log("toggleFormContent: ", flightNumber);
-  fetch(`/flights/${flightNumber}`)
-    .then((res) => res.json())
-    .then((data) => {
-      console.log(data);
-    });
+
   // TODO: contact the server to get the seating availability
   //      - only contact the server if the flight number is this format 'SA###'.
   //      - Do I need to create an error message if the number is not valid?
+  const regex = /^SA[0-9]{3}/;
+
+  if (regex.test(flightInput.value)) {
+    const res = await fetch(`/flights/${flightNumber}`);
+    const data = await res.json();
+
+    renderSeats(data);
+  }
 
   // TODO: Pass the response data to renderSeats to create the appropriate seat-type.
-  renderSeats();
 };
 
 const handleConfirmSeat = (event) => {
@@ -80,6 +80,7 @@ const handleConfirmSeat = (event) => {
   fetch("/users", {
     method: "POST",
     body: JSON.stringify({
+      id: Math.random() * 1000,
       givenName: document.getElementById("givenName").value,
     }),
     headers: {

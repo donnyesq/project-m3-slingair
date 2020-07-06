@@ -4,19 +4,25 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const morgan = require("morgan");
 const { flights } = require("./test-data/flightSeating");
+const { response } = require("express");
+const users = [];
 
 const PORT = process.env.PORT || 8000;
 
 const handleFlight = (req, res) => {
   const { flightNumber } = req.params;
+  console.log(flightNumber);
   // get all flight numbers
   const allFlights = Object.keys(flights);
   // is flightNumber in the array?
   if (allFlights.includes(flightNumber)) {
-    //
+    res.status(200).send(flights[flightNumber]);
+  } else {
+    res.status(400).send("Flight number does not exist");
   }
-  console.log("REAL FLIGHT: ", allFlights.includes(flightNumber));
 };
+
+const handleReservation = (req, res) => {};
 
 express()
   .use(function (req, res, next) {
@@ -33,6 +39,10 @@ express()
   .use(express.urlencoded({ extended: false }))
 
   // endpoints
+  .get("flights", (req, res) => res.status(200).send(flights))
   .get("/flights/:flightNumber", handleFlight)
+  .get("/users", (req, res) => res.status(200).send(users))
+  .post("/users", handleReservation)
   .use((req, res) => res.send("Not Found"))
+
   .listen(PORT, () => console.log(`Listening on port ${PORT}`));
