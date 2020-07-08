@@ -5,7 +5,6 @@ const confirmButton = document.getElementById("confirm-button");
 let selection = "";
 
 const renderSeats = (arrOfSeats) => {
-  console.log("ARRAY OF SEATS:", arrOfSeats);
   document.querySelector(".form-container").style.display = "block";
 
   const alpha = ["A", "B", "C", "D", "E", "F"];
@@ -74,20 +73,33 @@ const toggleFormContent = async (event) => {
   // TODO: Pass the response data to renderSeats to create the appropriate seat-type.
 };
 
+const randomId = Math.random() * 1001;
+
 const handleConfirmSeat = (event) => {
   event.preventDefault();
   // TODO: everything in here!
   fetch("/users", {
     method: "POST",
     body: JSON.stringify({
-      id: Math.random() * 1000,
+      id: randomId,
+      flight: flightInput.value,
+      seat: selection,
       givenName: document.getElementById("givenName").value,
+      surname: document.getElementById("surname").value,
+      email: document.getElementById("email").value,
     }),
     headers: {
       Accept: "application/json",
       "Content-Type": "application/json",
     },
-  });
+  })
+    .then((res) => {
+      return res.json();
+    })
+    .then((data) => {
+      console.log("DATA FROM POST REQUEST: ", data);
+      window.location = `/seat-select/confirmed.html?reservationId=${randomId}`;
+    });
 };
 
 flightInput.addEventListener("blur", toggleFormContent);

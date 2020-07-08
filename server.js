@@ -5,7 +5,7 @@ const bodyParser = require("body-parser");
 const morgan = require("morgan");
 const { flights } = require("./test-data/flightSeating");
 const { response } = require("express");
-const users = [];
+const { reservations } = require("./test-data/reservations");
 
 const PORT = process.env.PORT || 8000;
 
@@ -22,7 +22,12 @@ const handleFlight = (req, res) => {
   }
 };
 
-const handleReservation = (req, res) => {};
+const handleReservation = (req, res) => {
+  console.log("REQ.BODY", req.body);
+
+  reservations.push(req.body);
+  res.status(200).send(reservations);
+};
 
 express()
   .use(function (req, res, next) {
@@ -41,7 +46,7 @@ express()
   // endpoints
   .get("flights", (req, res) => res.status(200).send(flights))
   .get("/flights/:flightNumber", handleFlight)
-  .get("/users", (req, res) => res.status(200).send(users))
+  .get("/users", (req, res) => res.status(200).send(reservations))
   .post("/users", handleReservation)
   .use((req, res) => res.send("Not Found"))
 
