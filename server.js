@@ -46,7 +46,7 @@ express()
   // endpoints
   .get("flights", (req, res) => res.status(200).send(flights))
   .get("/flights/:flightNumber", handleFlight)
-  .get("/users", (req, res) => res.status(200).send(reservations))
+  .get("/users", (req, res) => res.status(200).send({ reservations }))
   .post("/users", handleReservation)
   .use((req, res) => res.send("Not Found"))
 

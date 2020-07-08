@@ -73,7 +73,7 @@ const toggleFormContent = async (event) => {
   // TODO: Pass the response data to renderSeats to create the appropriate seat-type.
 };
 
-const randomId = Math.random() * 1001;
+const randomId = Math.floor(Math.random() * 1001);
 
 const handleConfirmSeat = (event) => {
   event.preventDefault();
@@ -81,7 +81,7 @@ const handleConfirmSeat = (event) => {
   fetch("/users", {
     method: "POST",
     body: JSON.stringify({
-      id: randomId,
+      id: randomId.toString(),
       flight: flightInput.value,
       seat: selection,
       givenName: document.getElementById("givenName").value,

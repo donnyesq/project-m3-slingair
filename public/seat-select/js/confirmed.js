@@ -14,13 +14,16 @@ const getData = async () => {
     },
   });
 
-  const data = await response.json();
+  const { reservations } = await response.json();
 
-  console.log("DATA FROM CONFIRMED FETCH: ", data);
-  console.log(typeof data);
+  console.log("DATA FROM CONFIRMED FETCH: ", reservations);
 
-  const reservation = data.find((reservation) => {
-    reservation.id === reservationId;
+  const reservation = reservations.find((element) => {
+    console.log("element:", element);
+    console.log("reservation:", reservationId);
+    console.log(element.id === reservationId);
+    console.log(typeof element.id);
+    return element.id === reservationId;
   });
 
   flight.innerHTML = reservation.flight;
