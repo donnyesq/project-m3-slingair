@@ -1,4 +1,5 @@
 const reservationId = window.location.search.split("=")[1];
+console.log(reservationId);
 
 const flight = document.getElementById("flight");
 const seat = document.getElementById("seat");
@@ -6,7 +7,7 @@ const name = document.getElementById("name");
 const email = document.getElementById("email");
 
 const getData = async () => {
-  const response = await fetch("/users", {
+  const response = await fetch(`/users/${reservationId}`, {
     method: "GET",
     headers: {
       "Content-Type": "application/json",

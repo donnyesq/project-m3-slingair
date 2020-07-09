@@ -23,10 +23,20 @@ const handleFlight = (req, res) => {
 };
 
 const handleReservation = (req, res) => {
-  console.log("REQ.BODY", req.body);
-
   reservations.push(req.body);
   res.status(200).send(reservations);
+};
+
+const showReservation = (req, res) => {
+  console.log(req.params);
+  const idInput = req.params;
+  console.log(idInput);
+
+  const reso = reservations.find((element) => {
+    return element.id === idInput.reservationId;
+  });
+  console.log(reso);
+  res.status(200).json(reso);
 };
 
 express()
@@ -46,7 +56,10 @@ express()
   // endpoints
   .get("flights", (req, res) => res.status(200).send(flights))
   .get("/flights/:flightNumber", handleFlight)
-  .get("/users", (req, res) => res.status(200).send({ reservations }))
+  .get("/view-reservation/:reservationId", showReservation)
+  .get("/users/:reservationId", (req, res) =>
+    res.status(200).send({ reservations })
+  )
   .post("/users", handleReservation)
   .use((req, res) => res.send("Not Found"))
 
